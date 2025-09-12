@@ -1,0 +1,30 @@
+plugins = []
+functionsDirectory = "/home/florent/personal-dev/fruits/fruits-app/netlify/functions"
+functionsDirectoryOrigin = "config-v1"
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "/home/florent/personal-dev/fruits/fruits-app/dist"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "npm run build"
+functions = "/home/florent/personal-dev/fruits/fruits-app/netlify/functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
