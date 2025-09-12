@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { render } from '@testing-library/react';
@@ -36,7 +36,11 @@ describe('GameCard', () => {
   it('calls onClaim when claim button is clicked', async () => {
     const onClaim = vi.fn();
     renderWithTheme(<GameCard game={mockGame} onClaim={onClaim} onRelease={() => {}} currentVolunteer={null} />);
-    await userEvent.click(screen.getByRole('button', { name: /claim/i }));
+
+    await act(async () => {
+      await userEvent.click(screen.getByRole('button', { name: /claim/i }));
+    });
+
     expect(onClaim).toHaveBeenCalledWith('1');
   });
 

@@ -57,9 +57,12 @@ describe('App', () => {
 
   it('can claim a game', async () => {
     renderWithTheme(<App db={db} />);
-    
+
     const claimButton = (await screen.findAllByRole('button', { name: /claim/i }))[0];
-    await userEvent.click(claimButton);
+
+    await act(async () => {
+      await userEvent.click(claimButton);
+    });
 
     expect(db.claimGame).toHaveBeenCalledWith('1', expect.any(String));
   });
@@ -68,7 +71,10 @@ describe('App', () => {
     renderWithTheme(<App db={db} />);
 
     const releaseButton = await screen.findByRole('button', { name: /release/i });
-    await userEvent.click(releaseButton);
+
+    await act(async () => {
+      await userEvent.click(releaseButton);
+    });
 
     expect(db.releaseGame).toHaveBeenCalledWith('3');
   });
@@ -105,14 +111,18 @@ describe('App Manager Mode', () => {
   };
 
   const openPinDialog = async () => {
-    await userEvent.click(screen.getByRole('button', { name: /manager-settings/i }));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('button', { name: /manager-settings/i }));
+    });
     expect(await screen.findByText(/Manager Access/)).toBeInTheDocument();
   };
 
   const loginAsManager = async () => {
     await openPinDialog();
-    await userEvent.type(screen.getByLabelText(/Enter PIN/i), '1234');
-    await userEvent.click(screen.getByRole('button', { name: /Login/i }));
+    await act(async () => {
+      await userEvent.type(screen.getByLabelText(/Enter PIN/i), '1234');
+      await userEvent.click(screen.getByRole('button', { name: /Login/i }));
+    });
   };
 
   it('PIN entry shows manager view', async () => {
@@ -124,8 +134,12 @@ describe('App Manager Mode', () => {
   it('wrong PIN does not allow access', async () => {
     renderWithTheme(<App db={db} />);
     await openPinDialog();
-    await userEvent.type(screen.getByLabelText(/Enter PIN/i), '0000');
-    await userEvent.click(screen.getByRole('button', { name: /Login/i }));
+
+    await act(async () => {
+      await userEvent.type(screen.getByLabelText(/Enter PIN/i), '0000');
+      await userEvent.click(screen.getByRole('button', { name: /Login/i }));
+    });
+
     expect(window.alert).toHaveBeenCalledWith('Incorrect PIN');
     expect(screen.queryByText(/add a new game/i)).not.toBeInTheDocument();
   });
@@ -134,9 +148,11 @@ describe('App Manager Mode', () => {
     renderWithTheme(<App db={db} />);
     await loginAsManager();
 
-    await userEvent.type(screen.getByLabelText(/opponent/i), 'Manager Team');
-    await userEvent.type(screen.getByLabelText(/date/i), '2025-12-01T12:00');
-    await userEvent.click(screen.getByRole('button', { name: /add game/i }));
+    await act(async () => {
+      await userEvent.type(screen.getByLabelText(/opponent/i), 'Manager Team');
+      await userEvent.type(screen.getByLabelText(/date/i), '2025-12-01T12:00');
+      await userEvent.click(screen.getByRole('button', { name: /add game/i }));
+    });
 
     expect(db.addGame).toHaveBeenCalledWith({
       opponent: 'Manager Team',

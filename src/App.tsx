@@ -80,7 +80,11 @@ function App({ db }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <>
+      <Box sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -97,15 +101,30 @@ function App({ db }: AppProps) {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Container maxWidth="md">
-          <Box sx={{ my: 4 }}>
+        <Container
+          maxWidth="sm"
+          sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            py: 2
+          }}
+        >
+          <Box sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2
+          }}>
             {isManager && <AddGameForm onAdd={handleAddGame} />}
-            <GameList
-              games={games}
-              onClaim={handleClaim}
-              onRelease={handleRelease}
-              currentVolunteer={currentVolunteer}
-            />
+            <Box sx={{ flex: 1 }}>
+              <GameList
+                games={games}
+                onClaim={handleClaim}
+                onRelease={handleRelease}
+                currentVolunteer={currentVolunteer}
+              />
+            </Box>
           </Box>
         </Container>
         <Dialog open={pinDialogOpen} onClose={() => setPinDialogOpen(false)}>
@@ -129,7 +148,7 @@ function App({ db }: AppProps) {
             <Button onClick={handlePinSubmit}>Login</Button>
           </DialogActions>
         </Dialog>
-      </>
+      </Box>
     </ThemeProvider>
   );
 }

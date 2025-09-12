@@ -1,6 +1,6 @@
 import type { Game } from '../types/Game';
 import GameCard from './GameCard';
-import { Box, Typography } from '@mui/material';
+import { Stack, Typography, Box } from '@mui/material';
 
 type GameListProps = {
   games: Game[];
@@ -12,18 +12,29 @@ type GameListProps = {
 const GameList = ({ games, ...props }: GameListProps) => {
   if (games.length === 0) {
     return (
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
-        <Typography variant="h6">No games scheduled.</Typography>
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        minHeight: 200
+      }}>
+        <Typography variant="h6" sx={{
+          color: 'text.secondary',
+          textAlign: 'center'
+        }}>
+          No games scheduled.
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ mt: 4 }}>
+    <Stack spacing={1.5} sx={{ width: '100%' }}>
       {games.map((game) => (
         <GameCard key={game.id} game={game} {...props} />
       ))}
-    </Box>
+    </Stack>
   );
 };
 

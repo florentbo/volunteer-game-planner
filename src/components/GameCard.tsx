@@ -1,5 +1,5 @@
 import type { Game } from '../types/Game';
-import { Card, CardContent, Typography, Button, Box } from '@mui/material';
+import { Card, CardContent, Typography, Button, Stack } from '@mui/material';
 
 type GameCardProps = {
   game: Game;
@@ -21,35 +21,44 @@ const GameCard = ({ game, onClaim, onRelease, currentVolunteer }: GameCardProps)
   });
 
   return (
-    <Card sx={{ minWidth: 275, mb: 2 }}>
+    <Card>
       <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" spacing={1} mb={1}>
+          <Typography variant="body2" color="text.secondary">
             {gameDate}
           </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography variant="body2" color="text.secondary">
             {gameTime}
           </Typography>
-        </Box>
-        <Typography variant="h5" component="div">
+        </Stack>
+
+        <Typography variant="h6" component="div" gutterBottom>
           {game.isHome ? 'vs' : '@'} {game.opponent}
         </Typography>
-        <Box sx={{ mt: 2 }}>
-          {game.volunteer ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography variant="body1">{game.volunteer}</Typography>
-              {game.volunteer === currentVolunteer && (
-                <Button size="small" variant="outlined" onClick={() => onRelease(game.id)}>
-                  Release
-                </Button>
-              )}
-            </Box>
-          ) : (
-            <Button variant="contained" onClick={() => onClaim(game.id)}>
-              Claim
-            </Button>
-          )}
-        </Box>
+
+        {game.volunteer ? (
+          <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'stretch', sm: 'center' }} spacing={1}>
+            <Typography variant="body1">{game.volunteer}</Typography>
+            {game.volunteer === currentVolunteer && (
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => onRelease(game.id)}
+                sx={{ width: { xs: '100%', sm: 'auto' } }}
+              >
+                Release
+              </Button>
+            )}
+          </Stack>
+        ) : (
+          <Button
+            variant="contained"
+            onClick={() => onClaim(game.id)}
+            sx={{ width: '100%' }}
+          >
+            Claim
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
