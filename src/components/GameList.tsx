@@ -12,17 +12,22 @@ type GameListProps = {
 const GameList = ({ games, ...props }: GameListProps) => {
   if (games.length === 0) {
     return (
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-        minHeight: 200
-      }}>
-        <Typography variant="h6" sx={{
-          color: 'text.secondary',
-          textAlign: 'center'
-        }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          minHeight: 200,
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            color: 'text.secondary',
+            textAlign: 'center',
+          }}
+        >
           No games scheduled.
         </Typography>
       </Box>

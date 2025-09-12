@@ -8,7 +8,12 @@ type GameCardProps = {
   currentVolunteer: string | null;
 };
 
-const GameCard = ({ game, onClaim, onRelease, currentVolunteer }: GameCardProps) => {
+const GameCard = ({
+  game,
+  onClaim,
+  onRelease,
+  currentVolunteer,
+}: GameCardProps) => {
   const gameDate = game.date.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
@@ -23,7 +28,12 @@ const GameCard = ({ game, onClaim, onRelease, currentVolunteer }: GameCardProps)
   return (
     <Card>
       <CardContent>
-        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" spacing={1} mb={1}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          justifyContent="space-between"
+          spacing={1}
+          mb={1}
+        >
           <Typography variant="body2" color="text.secondary">
             {gameDate}
           </Typography>
@@ -37,7 +47,12 @@ const GameCard = ({ game, onClaim, onRelease, currentVolunteer }: GameCardProps)
         </Typography>
 
         {game.volunteer ? (
-          <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'stretch', sm: 'center' }} spacing={1}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            justifyContent="space-between"
+            alignItems={{ xs: 'stretch', sm: 'center' }}
+            spacing={1}
+          >
             <Typography variant="body1">{game.volunteer}</Typography>
             {game.volunteer === currentVolunteer && (
               <Button

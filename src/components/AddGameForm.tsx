@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import type { Game } from '../types/Game';
-import { TextField, Button, Checkbox, FormControlLabel, Stack, Typography } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Stack,
+  Typography,
+} from '@mui/material';
 
 type AddGameFormProps = {
   onAdd: (game: Omit<Game, 'id' | 'volunteer'>) => void;

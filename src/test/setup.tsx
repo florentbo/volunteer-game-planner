@@ -1,7 +1,13 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { render as rtlRender } from '@testing-library/react';
+import {
+  render as rtlRender,
+  screen,
+  waitFor,
+  fireEvent,
+  within,
+} from '@testing-library/react';
 
 // Create a theme for testing
 const theme = createTheme();
@@ -14,8 +20,11 @@ function render(ui: React.ReactElement, options = {}) {
   return rtlRender(ui, { wrapper: Wrapper, ...options });
 }
 
-// Re-export everything from testing-library
-export * from '@testing-library/react';
-
-// Override render method
-export { render };
+// Re-export specific functions from testing-library
+export {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  within,
+};

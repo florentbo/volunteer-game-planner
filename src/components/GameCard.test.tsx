@@ -22,20 +22,41 @@ const mockGame: Game = {
 
 describe('GameCard', () => {
   it('renders game date and opponent', () => {
-    renderWithTheme(<GameCard game={mockGame} onClaim={() => {}} onRelease={() => {}} currentVolunteer={null} />);
+    renderWithTheme(
+      <GameCard
+        game={mockGame}
+        onClaim={() => {}}
+        onRelease={() => {}}
+        currentVolunteer={null}
+      />
+    );
     expect(screen.getByText('vs Team Opponent')).toBeInTheDocument();
     expect(screen.getByText(/Sun, Oct 26/)).toBeInTheDocument();
     expect(screen.getByText(/11:00 AM/)).toBeInTheDocument();
   });
 
   it('shows claim button when unclaimed', () => {
-    renderWithTheme(<GameCard game={mockGame} onClaim={() => {}} onRelease={() => {}} currentVolunteer={null} />);
+    renderWithTheme(
+      <GameCard
+        game={mockGame}
+        onClaim={() => {}}
+        onRelease={() => {}}
+        currentVolunteer={null}
+      />
+    );
     expect(screen.getByRole('button', { name: /claim/i })).toBeInTheDocument();
   });
 
   it('calls onClaim when claim button is clicked', async () => {
     const onClaim = vi.fn();
-    renderWithTheme(<GameCard game={mockGame} onClaim={onClaim} onRelease={() => {}} currentVolunteer={null} />);
+    renderWithTheme(
+      <GameCard
+        game={mockGame}
+        onClaim={onClaim}
+        onRelease={() => {}}
+        currentVolunteer={null}
+      />
+    );
 
     await act(async () => {
       await userEvent.click(screen.getByRole('button', { name: /claim/i }));
@@ -46,13 +67,29 @@ describe('GameCard', () => {
 
   it('shows volunteer name when claimed', () => {
     const claimedGame = { ...mockGame, volunteer: 'Florent' };
-    renderWithTheme(<GameCard game={claimedGame} onClaim={() => {}} onRelease={() => {}} currentVolunteer="Florent" />);
+    renderWithTheme(
+      <GameCard
+        game={claimedGame}
+        onClaim={() => {}}
+        onRelease={() => {}}
+        currentVolunteer="Florent"
+      />
+    );
     expect(screen.getByText('Florent')).toBeInTheDocument();
   });
 
   it('shows release button for own claims', () => {
     const claimedGame = { ...mockGame, volunteer: 'Florent' };
-    renderWithTheme(<GameCard game={claimedGame} onClaim={() => {}} onRelease={() => {}} currentVolunteer="Florent" />);
-    expect(screen.getByRole('button', { name: /release/i })).toBeInTheDocument();
+    renderWithTheme(
+      <GameCard
+        game={claimedGame}
+        onClaim={() => {}}
+        onRelease={() => {}}
+        currentVolunteer="Florent"
+      />
+    );
+    expect(
+      screen.getByRole('button', { name: /release/i })
+    ).toBeInTheDocument();
   });
 });

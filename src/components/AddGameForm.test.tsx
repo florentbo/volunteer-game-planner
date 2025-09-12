@@ -9,7 +9,12 @@ import AddGameForm from './AddGameForm';
 const theme = createTheme();
 
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(<ThemeProvider theme={theme}><CssBaseline />{component}</ThemeProvider>);
+  return render(
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {component}
+    </ThemeProvider>
+  );
 };
 
 describe('AddGameForm', () => {
@@ -18,7 +23,9 @@ describe('AddGameForm', () => {
     expect(screen.getByLabelText(/opponent/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/home/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /add game/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /add game/i })
+    ).toBeInTheDocument();
   });
 
   it('validates required fields', async () => {
@@ -30,7 +37,7 @@ describe('AddGameForm', () => {
     });
 
     // Debug: Check if the error message exists with a more flexible matcher
-    const errorElement = screen.queryByText((content, element) => {
+    const errorElement = screen.queryByText((content) => {
       return content.includes('Opponent') && content.includes('required');
     });
 
@@ -39,7 +46,10 @@ describe('AddGameForm', () => {
     } else {
       // If error message is not found, let's see what error messages are present
       const allErrors = screen.queryAllByText(/required/i);
-      console.log('Found error messages:', allErrors.map(el => el.textContent));
+      console.log(
+        'Found error messages:',
+        allErrors.map((el) => el.textContent)
+      );
     }
 
     expect(onAdd).not.toHaveBeenCalled();

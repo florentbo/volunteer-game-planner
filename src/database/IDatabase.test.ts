@@ -16,13 +16,19 @@ describe('IDatabase interface', () => {
         };
         return Promise.resolve(newGame);
       }
-      claimGame(_gameId: string, _volunteer: string): Promise<Game> {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // @ts-ignore
+      claimGame(gameId: string, volunteer: string): Promise<Game> {
         throw new Error('Method not implemented.');
       }
-      releaseGame(_gameId: string): Promise<Game> {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // @ts-ignore
+      releaseGame(gameId: string): Promise<Game> {
         throw new Error('Method not implemented.');
       }
-      subscribe(_callback: (games: Game[]) => void): () => void {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // @ts-ignore
+      subscribe(callback: (games: Game[]) => void): () => void {
         throw new Error('Method not implemented.');
       }
     }

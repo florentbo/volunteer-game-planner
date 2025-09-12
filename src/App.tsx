@@ -80,11 +80,13 @@ function App({ db }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -107,15 +109,17 @@ function App({ db }: AppProps) {
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            py: 2
+            py: 2,
           }}
         >
-          <Box sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2
-          }}>
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+            }}
+          >
             {isManager && <AddGameForm onAdd={handleAddGame} />}
             <Box sx={{ flex: 1 }}>
               <GameList

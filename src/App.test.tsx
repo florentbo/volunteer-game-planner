@@ -20,9 +20,27 @@ describe('App', () => {
   beforeEach(() => {
     db = new MockDatabase();
     games = [
-      { id: '1', opponent: 'Test Team', date: new Date(), isHome: true, volunteer: null },
-      { id: '2', opponent: 'Claim Team', date: new Date(), isHome: false, volunteer: null },
-      { id: '3', opponent: 'Release Team', date: new Date(), isHome: true, volunteer: 'test-user' },
+      {
+        id: '1',
+        opponent: 'Test Team',
+        date: new Date(),
+        isHome: true,
+        volunteer: null,
+      },
+      {
+        id: '2',
+        opponent: 'Claim Team',
+        date: new Date(),
+        isHome: false,
+        volunteer: null,
+      },
+      {
+        id: '3',
+        opponent: 'Release Team',
+        date: new Date(),
+        isHome: true,
+        volunteer: 'test-user',
+      },
     ];
     vi.spyOn(db, 'getGames').mockResolvedValue(games);
     vi.spyOn(db, 'subscribe').mockImplementation((cb) => {
@@ -30,12 +48,12 @@ describe('App', () => {
       return () => {};
     });
     vi.spyOn(db, 'claimGame').mockImplementation(async (gameId, volunteer) => {
-      const game = games.find(g => g.id === gameId)!;
+      const game = games.find((g) => g.id === gameId)!;
       game.volunteer = volunteer;
       return game;
     });
     vi.spyOn(db, 'releaseGame').mockImplementation(async (gameId) => {
-      const game = games.find(g => g.id === gameId)!;
+      const game = games.find((g) => g.id === gameId)!;
       game.volunteer = null;
       return game;
     });
@@ -47,7 +65,12 @@ describe('App', () => {
   });
 
   const renderWithTheme = (component: React.ReactElement) => {
-    return render(<><CssBaseline />{component}</>);
+    return render(
+      <>
+        <CssBaseline />
+        {component}
+      </>
+    );
   };
 
   it('shows games list', async () => {
@@ -58,7 +81,9 @@ describe('App', () => {
   it('can claim a game', async () => {
     renderWithTheme(<App db={db} />);
 
-    const claimButton = (await screen.findAllByRole('button', { name: /claim/i }))[0];
+    const claimButton = (
+      await screen.findAllByRole('button', { name: /claim/i })
+    )[0];
 
     await act(async () => {
       await userEvent.click(claimButton);
@@ -70,7 +95,9 @@ describe('App', () => {
   it('can release own game', async () => {
     renderWithTheme(<App db={db} />);
 
-    const releaseButton = await screen.findByRole('button', { name: /release/i });
+    const releaseButton = await screen.findByRole('button', {
+      name: /release/i,
+    });
 
     await act(async () => {
       await userEvent.click(releaseButton);
@@ -107,12 +134,19 @@ describe('App Manager Mode', () => {
   });
 
   const renderWithTheme = (component: React.ReactElement) => {
-    return render(<><CssBaseline />{component}</>);
+    return render(
+      <>
+        <CssBaseline />
+        {component}
+      </>
+    );
   };
 
   const openPinDialog = async () => {
     await act(async () => {
-      await userEvent.click(screen.getByRole('button', { name: /manager-settings/i }));
+      await userEvent.click(
+        screen.getByRole('button', { name: /manager-settings/i })
+      );
     });
     expect(await screen.findByText(/Manager Access/)).toBeInTheDocument();
   };
@@ -169,7 +203,12 @@ describe('App Real-time Updates', () => {
   });
 
   const renderWithTheme = (component: React.ReactElement) => {
-    return render(<><CssBaseline />{component}</>);
+    return render(
+      <>
+        <CssBaseline />
+        {component}
+      </>
+    );
   };
 
   it('subscribe updates game list', async () => {
@@ -185,7 +224,15 @@ describe('App Real-time Updates', () => {
     expect(await screen.findByText(/no games/i)).toBeInTheDocument();
 
     await act(async () => {
-      callback([{ id: '1', opponent: 'Real-time Team', date: new Date(), isHome: true, volunteer: null }]);
+      callback([
+        {
+          id: '1',
+          opponent: 'Real-time Team',
+          date: new Date(),
+          isHome: true,
+          volunteer: null,
+        },
+      ]);
     });
 
     expect(await screen.findByText(/real-time team/i)).toBeInTheDocument();
