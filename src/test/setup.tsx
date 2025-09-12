@@ -21,10 +21,4 @@ function render(ui: React.ReactElement, options = {}) {
 }
 
 // Re-export specific functions from testing-library
-export {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  within,
-};
+export { render, screen, waitFor, fireEvent, within };

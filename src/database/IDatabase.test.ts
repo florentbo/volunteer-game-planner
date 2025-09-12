@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect } from 'vitest';
 import type { IDatabase } from './IDatabase';
 import type { Game } from '../types/Game';
@@ -16,19 +17,19 @@ describe('IDatabase interface', () => {
         };
         return Promise.resolve(newGame);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // @ts-ignore
+      // @ts-expect-error - Test implementation, parameters unused intentionally
       claimGame(gameId: string, volunteer: string): Promise<Game> {
+        // Test implementation - method signature required by interface
         throw new Error('Method not implemented.');
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // @ts-ignore
+      // @ts-expect-error - Test implementation, parameters unused intentionally
       releaseGame(gameId: string): Promise<Game> {
+        // Test implementation - method signature required by interface
         throw new Error('Method not implemented.');
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // @ts-ignore
+      // @ts-expect-error - Test implementation, parameters unused intentionally
       subscribe(callback: (games: Game[]) => void): () => void {
+        // Test implementation - method signature required by interface
         throw new Error('Method not implemented.');
       }
     }
