@@ -71,7 +71,7 @@ const GameCard = ({
             onClick={() => onClaim(game.id)}
             sx={{ width: '100%' }}
           >
-            Claim
+            Je m'en occupe
           </Button>
         )}
       </CardContent>

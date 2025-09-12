@@ -32,7 +32,7 @@ type AppProps = {
 
 function App({ db }: AppProps) {
   const [games, setGames] = useState<Game[]>([]);
-  const currentVolunteer = 'test-user';
+  const currentVolunteer = 'Florent'; // This would be dynamic in a real app
   const [pin, setPin] = useState('');
   const [isManager, setIsManager] = useState(false);
   const [pinDialogOpen, setPinDialogOpen] = useState(false);
@@ -82,7 +82,6 @@ function App({ db }: AppProps) {
       <CssBaseline />
       <Box
         sx={{
-          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -104,24 +103,23 @@ function App({ db }: AppProps) {
           </Toolbar>
         </AppBar>
         <Container
-          maxWidth="sm"
+          maxWidth={false}
           sx={{
-            flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            py: 2,
+            px: 2,
+            py: 1,
           }}
         >
           <Box
             sx={{
-              flex: 1,
               display: 'flex',
               flexDirection: 'column',
               gap: 2,
             }}
           >
             {isManager && <AddGameForm onAdd={handleAddGame} />}
-            <Box sx={{ flex: 1 }}>
+            <Box>
               <GameList
                 games={games}
                 onClaim={handleClaim}

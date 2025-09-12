@@ -18,11 +18,7 @@ db.addGame({
   isHome: true, // Home game
 });
 
-// Pre-assign volunteers after games are added
-setTimeout(() => {
-  db.claimGame('1', 'Delphine'); // Match 1 - Delphine
-  db.claimGame('2', 'Florent'); // Match 2 - Florent
-}, 100);
+// Games start unclaimed - volunteers can claim them using the Claim buttons
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
