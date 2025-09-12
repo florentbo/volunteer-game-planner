@@ -6,17 +6,23 @@ import { MockDatabase } from './database/MockDatabase.ts';
 
 const db = new MockDatabase();
 
-// Sample data for demonstration
+// Sample data for demonstration - This Saturday and Next Saturday
 db.addGame({
-  opponent: 'Team A',
-  date: new Date('2025-10-12T18:00:00Z'),
-  isHome: true,
+  opponent: 'Lynx',
+  date: new Date('2025-09-13T18:00:00Z'), // This Saturday
+  isHome: true, // Home game
 });
 db.addGame({
-  opponent: 'Team B',
-  date: new Date('2025-10-19T15:00:00Z'),
-  isHome: false,
+  opponent: 'Chessy',
+  date: new Date('2025-09-20T15:00:00Z'), // Next Saturday
+  isHome: true, // Home game
 });
+
+// Pre-assign volunteers after games are added
+setTimeout(() => {
+  db.claimGame('1', 'Delphine'); // Match 1 - Delphine
+  db.claimGame('2', 'Florent'); // Match 2 - Florent
+}, 100);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
