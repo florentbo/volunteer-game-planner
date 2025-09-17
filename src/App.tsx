@@ -63,6 +63,11 @@ function App({ db }: AppProps) {
       console.log('🔄 Calling db.claimGame...');
       const result = await db.claimGame(selectedGameId, parent, children);
       console.log('✅ db.claimGame success:', result);
+      // Immediately refresh the games list for instant UI update
+      console.log('🔄 Refreshing games list for immediate UI update...');
+      const updatedGames = await db.getGames();
+      setGames(updatedGames);
+      console.log('✅ Games list refreshed immediately');
       // On success, close dialog and reset state
       console.log('🚪 Closing dialog and resetting state...');
       setClaimDialogOpen(false);
