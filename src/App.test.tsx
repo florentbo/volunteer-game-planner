@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { act, screen, cleanup } from '@testing-library/react';
+import { act, screen, cleanup, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CssBaseline from '@mui/material/CssBaseline';
 import { render } from '@testing-library/react';
@@ -177,10 +177,8 @@ describe('App Manager Mode', () => {
     await act(async () => {
       await userEvent.click(screen.getByRole('button', { name: /Login/i }));
     });
-    // Wait for the dialog to close
-    await act(async () => {
-      await screen.findByText(/add a new game/i);
-    });
+    // Wait for the dialog to completely disappear
+    await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
   };
 
   it('PIN entry shows manager view', async () => {
