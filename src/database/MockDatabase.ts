@@ -20,7 +20,11 @@ export class MockDatabase implements IDatabase {
     this.notifySubscribers();
     return Promise.resolve(newGame);
   }
-  async claimGame(gameId: string, volunteer: string): Promise<Game> {
+  async claimGame(
+    gameId: string,
+    parent: string,
+    children: string
+  ): Promise<Game> {
     const game = this.games.find((g) => g.id === gameId);
     if (!game) {
       throw new Error('Game not found');
@@ -28,16 +32,7 @@ export class MockDatabase implements IDatabase {
     if (game.volunteer) {
       throw new Error('Game already claimed');
     }
-    game.volunteer = volunteer;
-    this.notifySubscribers();
-    return Promise.resolve(game);
-  }
-  async releaseGame(gameId: string): Promise<Game> {
-    const game = this.games.find((g) => g.id === gameId);
-    if (!game) {
-      throw new Error('Game not found');
-    }
-    game.volunteer = null;
+    game.volunteer = { parent, children };
     this.notifySubscribers();
     return Promise.resolve(game);
   }

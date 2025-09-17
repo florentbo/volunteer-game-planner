@@ -18,33 +18,19 @@ const mockGames: Game[] = [
     date: new Date(),
     opponent: 'B',
     isHome: false,
-    volunteer: 'Florent',
+    volunteer: { parent: 'Test Parent', children: 'Test Children' },
   },
 ];
 
 describe('GameList', () => {
   it('renders multiple games', () => {
-    renderWithTheme(
-      <GameList
-        games={mockGames}
-        onClaim={() => {}}
-        onRelease={() => {}}
-        currentVolunteer="Florent"
-      />
-    );
+    renderWithTheme(<GameList games={mockGames} onClaim={() => {}} />);
     expect(screen.getByText('vs A')).toBeInTheDocument();
     expect(screen.getByText('@ B')).toBeInTheDocument();
   });
 
   it('shows "No games" when empty', () => {
-    renderWithTheme(
-      <GameList
-        games={[]}
-        onClaim={() => {}}
-        onRelease={() => {}}
-        currentVolunteer={null}
-      />
-    );
+    renderWithTheme(<GameList games={[]} onClaim={() => {}} />);
     expect(screen.getByText('No games scheduled.')).toBeInTheDocument();
   });
 });

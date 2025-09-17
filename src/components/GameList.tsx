@@ -5,8 +5,6 @@ import { Stack, Typography, Box } from '@mui/material';
 type GameListProps = {
   games: Game[];
   onClaim: (gameId: string) => void;
-  onRelease: (gameId: string) => void;
-  currentVolunteer: string | null;
 };
 
 const GameList = ({ games, ...props }: GameListProps) => {

@@ -3,6 +3,7 @@ import type { Game } from './types/Game';
 import type { IDatabase } from './database/IDatabase';
 import GameList from './components/GameList';
 import AddGameForm from './components/AddGameForm';
+import ClaimGameDialog from './components/ClaimGameDialog';
 import {
   Container,
   Typography,
@@ -32,10 +33,11 @@ type AppProps = {
 
 function App({ db }: AppProps) {
   const [games, setGames] = useState<Game[]>([]);
-  const currentVolunteer = 'Florent'; // This would be dynamic in a real app
   const [pin, setPin] = useState('');
   const [isManager, setIsManager] = useState(false);
   const [pinDialogOpen, setPinDialogOpen] = useState(false);
+  const [claimDialogOpen, setClaimDialogOpen] = useState(false);
+  const [selectedGameId, setSelectedGameId] = useState<string>('');
 
   useEffect(() => {
     const unsubscribe = db.subscribe(setGames);
@@ -43,14 +45,22 @@ function App({ db }: AppProps) {
     return unsubscribe;
   }, [db]);
 
-  const handleClaim = (gameId: string) => {
-    if (currentVolunteer) {
-      db.claimGame(gameId, currentVolunteer);
+  const handleClaimClick = (gameId: string) => {
+    setSelectedGameId(gameId);
+    setClaimDialogOpen(true);
+  };
+
+  const handleClaimConfirm = (parent: string, children: string) => {
+    if (selectedGameId) {
+      db.claimGame(selectedGameId, parent, children);
+      setClaimDialogOpen(false);
+      setSelectedGameId('');
     }
   };
 
-  const handleRelease = (gameId: string) => {
-    db.releaseGame(gameId);
+  const handleClaimCancel = () => {
+    setClaimDialogOpen(false);
+    setSelectedGameId('');
   };
 
   const handleAddGame = (game: Omit<Game, 'id' | 'volunteer'>) => {
@@ -120,12 +130,7 @@ function App({ db }: AppProps) {
           >
             {isManager && <AddGameForm onAdd={handleAddGame} />}
             <Box>
-              <GameList
-                games={games}
-                onClaim={handleClaim}
-                onRelease={handleRelease}
-                currentVolunteer={currentVolunteer}
-              />
+              <GameList games={games} onClaim={handleClaimClick} />
             </Box>
           </Box>
         </Container>
@@ -150,6 +155,11 @@ function App({ db }: AppProps) {
             <Button onClick={handlePinSubmit}>Login</Button>
           </DialogActions>
         </Dialog>
+        <ClaimGameDialog
+          open={claimDialogOpen}
+          onClose={handleClaimCancel}
+          onConfirm={handleClaimConfirm}
+        />
       </Box>
     </ThemeProvider>
   );

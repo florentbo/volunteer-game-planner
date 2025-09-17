@@ -4,16 +4,9 @@ import { Card, CardContent, Typography, Button, Stack } from '@mui/material';
 type GameCardProps = {
   game: Game;
   onClaim: (gameId: string) => void;
-  onRelease: (gameId: string) => void;
-  currentVolunteer: string | null;
 };
 
-const GameCard = ({
-  game,
-  onClaim,
-  onRelease,
-  currentVolunteer,
-}: GameCardProps) => {
+const GameCard = ({ game, onClaim }: GameCardProps) => {
   const gameDate = game.date.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
@@ -47,24 +40,9 @@ const GameCard = ({
         </Typography>
 
         {game.volunteer ? (
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            justifyContent="space-between"
-            alignItems={{ xs: 'stretch', sm: 'center' }}
-            spacing={1}
-          >
-            <Typography variant="body1">{game.volunteer}</Typography>
-            {game.volunteer === currentVolunteer && (
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => onRelease(game.id)}
-                sx={{ width: { xs: '100%', sm: 'auto' } }}
-              >
-                Release
-              </Button>
-            )}
-          </Stack>
+          <Typography variant="body1">
+            Parent: {game.volunteer.parent} | Enfants: {game.volunteer.children}
+          </Typography>
         ) : (
           <Button
             variant="contained"

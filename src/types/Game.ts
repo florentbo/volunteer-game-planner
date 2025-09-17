@@ -3,5 +3,5 @@ export type Game = {
   date: Date;
   opponent: string;
   isHome: boolean;
-  volunteer: string | null;
+  volunteer: { parent: string; children: string } | null;
 };

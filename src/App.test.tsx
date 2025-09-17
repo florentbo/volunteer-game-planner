@@ -39,7 +39,7 @@ describe('App', () => {
         opponent: 'Release Team',
         date: new Date(),
         isHome: true,
-        volunteer: 'test-user',
+        volunteer: { parent: 'Test Parent', children: 'Test Children' },
       },
     ];
     vi.spyOn(db, 'getGames').mockResolvedValue(games);
@@ -47,16 +47,13 @@ describe('App', () => {
       cb(games);
       return () => {};
     });
-    vi.spyOn(db, 'claimGame').mockImplementation(async (gameId, volunteer) => {
-      const game = games.find((g) => g.id === gameId)!;
-      game.volunteer = volunteer;
-      return game;
-    });
-    vi.spyOn(db, 'releaseGame').mockImplementation(async (gameId) => {
-      const game = games.find((g) => g.id === gameId)!;
-      game.volunteer = null;
-      return game;
-    });
+    vi.spyOn(db, 'claimGame').mockImplementation(
+      async (gameId, parent, children) => {
+        const game = games.find((g) => g.id === gameId)!;
+        game.volunteer = { parent, children };
+        return game;
+      }
+    );
   });
 
   afterEach(() => {
@@ -78,32 +75,51 @@ describe('App', () => {
     expect(await screen.findByText(/Test Team/)).toBeInTheDocument();
   });
 
-  it('can claim a game', async () => {
+  it('can claim a game through dialog', async () => {
     renderWithTheme(<App db={db} />);
 
-    const claimButton = (
-      await screen.findAllByRole('button', { name: /claim/i })
-    )[0];
-
-    await act(async () => {
-      await userEvent.click(claimButton);
+    // Get all claim buttons and click the first one
+    const claimButtons = await screen.findAllByRole('button', {
+      name: /je m'en occupe/i,
     });
 
-    expect(db.claimGame).toHaveBeenCalledWith('1', expect.any(String));
+    await act(async () => {
+      await userEvent.click(claimButtons[0]);
+    });
+
+    // Dialog should open with form fields
+    expect(screen.getByLabelText(/nom du parent/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/nom de l'enfant/i)).toBeInTheDocument();
+
+    // Fill in the form
+    await userEvent.type(
+      screen.getByLabelText(/nom du parent/i),
+      'Test Parent'
+    );
+    await userEvent.type(
+      screen.getByLabelText(/nom de l'enfant/i),
+      'Test Children'
+    );
+
+    // Submit the form
+    await act(async () => {
+      await userEvent.click(screen.getByRole('button', { name: /confirmer/i }));
+    });
+
+    expect(db.claimGame).toHaveBeenCalledWith(
+      '1',
+      'Test Parent',
+      'Test Children'
+    );
   });
 
-  it('can release own game', async () => {
+  it('displays claimed game with parent and children info', async () => {
     renderWithTheme(<App db={db} />);
 
-    const releaseButton = await screen.findByRole('button', {
-      name: /release/i,
-    });
-
-    await act(async () => {
-      await userEvent.click(releaseButton);
-    });
-
-    expect(db.releaseGame).toHaveBeenCalledWith('3');
+    // Should display the volunteer info in French
+    expect(
+      await screen.findByText(/Parent: Test Parent \| Enfants: Test Children/)
+    ).toBeInTheDocument();
   });
 });
 
