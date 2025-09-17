@@ -6,7 +6,8 @@ CREATE TABLE games (
   is_home BOOLEAN NOT NULL DEFAULT false,
   volunteer_parent TEXT,
   volunteer_children TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Enable Row Level Security (RLS)
@@ -28,5 +29,23 @@ FOR UPDATE USING (true);
 INSERT INTO games (date, opponent, is_home) VALUES
   ('2025-01-25 14:00:00+00', 'Lions FC', true),
   ('2025-02-01 16:30:00+00', 'Eagles United', false),
-  ('2025-02-08 15:00:00+00', 'Sharks FC', true),
-  ('2025-02-15 14:00:00+00', 'Tigers Sports', false);
+   ('2025-02-08 15:00:00+00', 'Sharks FC', true),
+   ('2025-02-15 14:00:00+00', 'Tigers Sports', false);
+
+-- Function and Trigger for updated_at
+CREATE OR REPLACE FUNCTION public.handle_updated_at()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$;
+
+ALTER FUNCTION public.handle_updated_at() SET search_path = public;
+
+CREATE TRIGGER on_games_update
+  BEFORE UPDATE ON games
+  FOR EACH ROW
+  EXECUTE PROCEDURE public.handle_updated_at();
