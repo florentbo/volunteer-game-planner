@@ -18,6 +18,7 @@ This is a **Game Schedule Management App** built with React, TypeScript, and Vit
 ```bash
 # Development
 npm run dev              # Start development server with hot reload
+npm run dev:env          # Start dev server with Supabase environment (requires setup)
 
 # Building
 npm run build            # Type-check and build for production
