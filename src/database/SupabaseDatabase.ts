@@ -27,17 +27,23 @@ export class SupabaseDatabase implements IDatabase {
   }
 
   async getGames(): Promise<Game[]> {
+    console.log('🔍 SupabaseDatabase.getGames() called');
     const { data, error } = await supabase
       .from('games')
       .select('*')
       .order('date', { ascending: true });
 
+    console.log('📊 Supabase response:', { data, error });
+
     if (error) {
+      console.log('❌ Supabase error:', error);
       throw new Error(`Failed to fetch games: ${error.message}`);
     }
 
+    console.log('🗃️ Raw data from Supabase:', data);
+
     // Transform Supabase data to match our Game type
-    return data.map((row) => ({
+    const transformedGames = data.map((row) => ({
       id: row.id,
       date: new Date(row.date),
       opponent: row.opponent,
@@ -50,6 +56,9 @@ export class SupabaseDatabase implements IDatabase {
             }
           : null,
     }));
+
+    console.log('🎮 Transformed games:', transformedGames);
+    return transformedGames;
   }
 
   async addGame(game: Omit<Game, 'id' | 'volunteer'>): Promise<Game> {

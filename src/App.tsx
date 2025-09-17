@@ -38,6 +38,7 @@ function App({ db }: AppProps) {
   const [pinDialogOpen, setPinDialogOpen] = useState(false);
   const [claimDialogOpen, setClaimDialogOpen] = useState(false);
   const [selectedGameId, setSelectedGameId] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     const unsubscribe = db.subscribe(setGames);
@@ -50,17 +51,36 @@ function App({ db }: AppProps) {
     setClaimDialogOpen(true);
   };
 
-  const handleClaimConfirm = (parent: string, children: string) => {
-    if (selectedGameId) {
-      db.claimGame(selectedGameId, parent, children);
+  const handleClaimConfirm = async (parent: string, children: string) => {
+    console.log('🎯 handleClaimConfirm called with:', { parent, children, selectedGameId });
+    if (!selectedGameId) {
+      console.log('❌ No selectedGameId, returning early');
+      return;
+    }
+
+    try {
+      setErrorMessage(''); // Clear any previous errors
+      console.log('🔄 Calling db.claimGame...');
+      const result = await db.claimGame(selectedGameId, parent, children);
+      console.log('✅ db.claimGame success:', result);
+      // On success, close dialog and reset state
+      console.log('🚪 Closing dialog and resetting state...');
       setClaimDialogOpen(false);
       setSelectedGameId('');
+      console.log('🔄 Dialog state updated:', { claimDialogOpen: false, selectedGameId: '' });
+    } catch (error) {
+      console.log('❌ db.claimGame error:', error);
+      // Show user-friendly error message
+      const message = error instanceof Error ? error.message : 'Une erreur est survenue';
+      setErrorMessage(message);
+      // Keep dialog open so user can try again
     }
   };
 
   const handleClaimCancel = () => {
     setClaimDialogOpen(false);
     setSelectedGameId('');
+    setErrorMessage('');
   };
 
   const handleAddGame = (game: Omit<Game, 'id' | 'volunteer'>) => {
@@ -159,6 +179,7 @@ function App({ db }: AppProps) {
           open={claimDialogOpen}
           onClose={handleClaimCancel}
           onConfirm={handleClaimConfirm}
+          errorMessage={errorMessage}
         />
       </Box>
     </ThemeProvider>
