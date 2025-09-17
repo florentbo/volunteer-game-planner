@@ -8,7 +8,7 @@ This is a **Game Schedule Management App** built with React, TypeScript, and Vit
 
 ### Key Architecture Concepts
 
-- **Database Abstraction**: Uses an `IDatabase` interface pattern for data access, currently implemented with `MockDatabase` for in-memory storage
+- **Database Abstraction**: Uses an `IDatabase` interface pattern for data access, implemented with `SupabaseDatabase` for PostgreSQL storage with real-time capabilities
 - **Component-based Structure**: React components organized by responsibility (GameList, GameCard, AddGameForm)
 - **Material-UI Integration**: Uses MUI components with a consistent theme throughout the app
 - **Dependency Injection**: The database instance is injected into App component via props for testability

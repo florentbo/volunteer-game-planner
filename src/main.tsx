@@ -2,23 +2,12 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
-import { MockDatabase } from './database/MockDatabase.ts';
+import { SupabaseDatabase } from './database/SupabaseDatabase.ts';
 
-const db = new MockDatabase();
+const db = new SupabaseDatabase();
 
-// Sample data for demonstration - This Saturday and Next Saturday
-db.addGame({
-  opponent: 'Lynx',
-  date: new Date('2025-09-13T18:00:00Z'), // This Saturday
-  isHome: true, // Home game
-});
-db.addGame({
-  opponent: 'Chessy',
-  date: new Date('2025-09-20T15:00:00Z'), // Next Saturday
-  isHome: true, // Home game
-});
-
-// Games start unclaimed - volunteers can claim them using the Claim buttons
+// No need for sample data - it's now stored in Supabase!
+// The database will be populated via the SQL script you ran earlier
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

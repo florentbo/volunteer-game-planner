@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { act, screen, cleanup, waitForElementToBeRemoved } from '@testing-library/react';
+import {
+  act,
+  screen,
+  cleanup,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CssBaseline from '@mui/material/CssBaseline';
 import { render } from '@testing-library/react';
