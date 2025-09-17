@@ -3,12 +3,14 @@
 ## 🚀 Quick Setup Instructions
 
 ### 1. Get Your Supabase Credentials
+
 1. Go to **https://supabase.com**
 2. Create a new project called `fruits-app-games`
 3. Go to **Settings** → **API**
 4. Copy your **Project URL** and **anon key**
 
 ### 2. Create Your Environment Script
+
 Copy the template and add your actual Supabase credentials:
 
 ```bash
@@ -21,11 +23,13 @@ export VITE_SUPABASE_ANON_KEY="your_actual_anon_key_here"
 ```
 
 ### 3. Set Up Your Database
+
 1. In Supabase dashboard, go to **SQL Editor**
 2. Run the SQL from `supabase-schema.sql`
 3. This creates the `games` table and sample data
 
 ### 4. Run the App!
+
 ```bash
 # Option 1: Use the convenient npm script
 npm run dev:env

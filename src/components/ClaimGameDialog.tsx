@@ -26,7 +26,11 @@ const ClaimGameDialog = ({
   const [parentName, setParentName] = useState('');
   const [childrenNames, setChildrenNames] = useState('');
 
-  console.log('🔍 ClaimGameDialog state:', { parentName, childrenNames, disabled: !parentName.trim() || !childrenNames.trim() });
+  console.log('🔍 ClaimGameDialog state:', {
+    parentName,
+    childrenNames,
+    disabled: !parentName.trim() || !childrenNames.trim(),
+  });
 
   // Reset form when dialog opens
   useEffect(() => {
@@ -38,13 +42,21 @@ const ClaimGameDialog = ({
   }, [open]);
 
   const handleConfirm = () => {
-    console.log('🚀 ClaimGameDialog handleConfirm called with:', { parentName, childrenNames });
+    console.log('🚀 ClaimGameDialog handleConfirm called with:', {
+      parentName,
+      childrenNames,
+    });
     if (parentName.trim() && childrenNames.trim()) {
-      console.log('📞 Calling onConfirm with:', { parent: parentName.trim(), children: childrenNames.trim() });
+      console.log('📞 Calling onConfirm with:', {
+        parent: parentName.trim(),
+        children: childrenNames.trim(),
+      });
       onConfirm(parentName.trim(), childrenNames.trim());
       // Don't automatically close - let App.tsx handle closing on success
     } else {
-      console.log('⚠️ Form validation failed - missing parent or children name');
+      console.log(
+        '⚠️ Form validation failed - missing parent or children name'
+      );
     }
   };
 

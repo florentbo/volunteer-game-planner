@@ -1,0 +1,59 @@
+# Netlify Configuration for Fruits Game Scheduler
+[build]
+  # Build command
+  command = "npm run build"
+  # Directory with the build output
+  publish = "dist"
+
+# Production environment variables
+# These should be set in Netlify UI under Site Settings > Environment Variables
+# Or using the Netlify CLI: netlify env:set VARIABLE_NAME "value"
+[build.environment]
+  # Node.js version
+  NODE_VERSION = "18"
+  # React app build optimizations
+  GENERATE_SOURCEMAP = "false"
+  CI = "false"
+
+# Build settings for different branches
+[context.production]
+  # Production-specific settings
+  command = "npm run build"
+
+[context.branch-deploy]
+  # Branch deploy settings (for preview deployments)
+  command = "npm run build"
+
+[context.deploy-preview]
+  # Pull request preview settings
+  command = "npm run build"
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Cache control for static assets
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    # No caching for HTML files (for updates)
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Redirects and rewrites
+[[redirects]]
+  # SPA fallback - serve index.html for all routes
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Form handling (if you add contact forms later)
+# [[redirects]]
+#   from = "/api/*"
+#   to = "/.netlify/functions/:splat"
+#   status = 200

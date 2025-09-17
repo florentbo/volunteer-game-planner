@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Netlify Environment Variables Setup Script
+# Copy this file to set-netlify-env.sh and fill in your actual values
+# Then run: chmod +x scripts/set-netlify-env.sh && ./scripts/set-netlify-env.sh
+
+# Your Netlify site name (from your Netlify dashboard)
+NETLIFY_SITE_NAME="your-site-name"
+
+# Your Supabase credentials (same as dev environment)
+VITE_SUPABASE_URL="your-supabase-url"
+VITE_SUPABASE_ANON_KEY="your-supabase-anon-key"
+
+echo "Setting up Netlify environment variables for site: $NETLIFY_SITE_NAME"
+
+# Set environment variables using Netlify CLI
+# Install with: npm install -g netlify-cli
+# Login with: netlify login
+
+echo "Setting VITE_SUPABASE_URL..."
+netlify env:set VITE_SUPABASE_URL "$VITE_SUPABASE_URL"
+
+echo "Setting VITE_SUPABASE_ANON_KEY..."
+netlify env:set VITE_SUPABASE_ANON_KEY "$VITE_SUPABASE_ANON_KEY"
+
+echo "✅ Netlify environment variables configured!"
+echo ""
+echo "You can verify the variables with:"
+echo "netlify env:list"
+echo ""
+echo "To deploy your site:"
+echo "netlify deploy --prod"

@@ -52,7 +52,11 @@ function App({ db }: AppProps) {
   };
 
   const handleClaimConfirm = async (parent: string, children: string) => {
-    console.log('🎯 handleClaimConfirm called with:', { parent, children, selectedGameId });
+    console.log('🎯 handleClaimConfirm called with:', {
+      parent,
+      children,
+      selectedGameId,
+    });
     if (!selectedGameId) {
       console.log('❌ No selectedGameId, returning early');
       return;
@@ -72,11 +76,15 @@ function App({ db }: AppProps) {
       console.log('🚪 Closing dialog and resetting state...');
       setClaimDialogOpen(false);
       setSelectedGameId('');
-      console.log('🔄 Dialog state updated:', { claimDialogOpen: false, selectedGameId: '' });
+      console.log('🔄 Dialog state updated:', {
+        claimDialogOpen: false,
+        selectedGameId: '',
+      });
     } catch (error) {
       console.log('❌ db.claimGame error:', error);
       // Show user-friendly error message
-      const message = error instanceof Error ? error.message : 'Une erreur est survenue';
+      const message =
+        error instanceof Error ? error.message : 'Une erreur est survenue';
       setErrorMessage(message);
       // Keep dialog open so user can try again
     }
@@ -124,7 +132,7 @@ function App({ db }: AppProps) {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Game Schedule
+              Qui apporte les fruits ?
             </Typography>
             <IconButton
               size="large"

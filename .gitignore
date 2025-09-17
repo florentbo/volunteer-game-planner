@@ -14,6 +14,7 @@ dist-ssr
 
 # Environment scripts with real credentials (copy from .template)
 scripts/set-dev-env.sh
+scripts/set-netlify-env.sh
 
 # Editor directories and files
 .vscode/*
