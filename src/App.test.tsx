@@ -92,14 +92,16 @@ describe('App', () => {
     expect(screen.getByLabelText(/nom de l'enfant/i)).toBeInTheDocument();
 
     // Fill in the form
-    await userEvent.type(
-      screen.getByLabelText(/nom du parent/i),
-      'Test Parent'
-    );
-    await userEvent.type(
-      screen.getByLabelText(/nom de l'enfant/i),
-      'Test Children'
-    );
+    await act(async () => {
+      await userEvent.type(
+        screen.getByLabelText(/nom du parent/i),
+        'Test Parent'
+      );
+      await userEvent.type(
+        screen.getByLabelText(/nom de l'enfant/i),
+        'Test Children'
+      );
+    });
 
     // Submit the form
     await act(async () => {
@@ -171,7 +173,13 @@ describe('App Manager Mode', () => {
     await openPinDialog();
     await act(async () => {
       await userEvent.type(screen.getByLabelText(/Enter PIN/i), '1234');
+    });
+    await act(async () => {
       await userEvent.click(screen.getByRole('button', { name: /Login/i }));
+    });
+    // Wait for the dialog to close
+    await act(async () => {
+      await screen.findByText(/add a new game/i);
     });
   };
 
@@ -187,6 +195,8 @@ describe('App Manager Mode', () => {
 
     await act(async () => {
       await userEvent.type(screen.getByLabelText(/Enter PIN/i), '0000');
+    });
+    await act(async () => {
       await userEvent.click(screen.getByRole('button', { name: /Login/i }));
     });
 
@@ -201,6 +211,8 @@ describe('App Manager Mode', () => {
     await act(async () => {
       await userEvent.type(screen.getByLabelText(/opponent/i), 'Manager Team');
       await userEvent.type(screen.getByLabelText(/date/i), '2025-12-01T12:00');
+    });
+    await act(async () => {
       await userEvent.click(screen.getByRole('button', { name: /add game/i }));
     });
 
