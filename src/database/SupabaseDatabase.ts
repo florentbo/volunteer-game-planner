@@ -1,6 +1,7 @@
 import type { Game } from '../types/Game';
 import type { IDatabase } from './IDatabase';
 import { supabase } from '../lib/supabase';
+import { logger } from '../lib/logger';
 
 export class SupabaseDatabase implements IDatabase {
   private subscribers: Array<(games: Game[]) => void> = [];
@@ -27,20 +28,20 @@ export class SupabaseDatabase implements IDatabase {
   }
 
   async getGames(): Promise<Game[]> {
-    console.log('🔍 SupabaseDatabase.getGames() called');
+    logger.log('🔍 SupabaseDatabase.getGames() called');
     const { data, error } = await supabase
       .from('games')
       .select('*')
       .order('date', { ascending: true });
 
-    console.log('📊 Supabase response:', { data, error });
+    logger.log('📊 Supabase response:', { data, error });
 
     if (error) {
-      console.log('❌ Supabase error:', error);
+      logger.error('❌ Supabase error:', error);
       throw new Error(`Failed to fetch games: ${error.message}`);
     }
 
-    console.log('🗃️ Raw data from Supabase:', data);
+    logger.log('🗃️ Raw data from Supabase:', data);
 
     // Transform Supabase data to match our Game type
     const transformedGames = data.map((row) => ({
@@ -57,7 +58,7 @@ export class SupabaseDatabase implements IDatabase {
           : null,
     }));
 
-    console.log('🎮 Transformed games:', transformedGames);
+    logger.log('🎮 Transformed games:', transformedGames);
     return transformedGames;
   }
 
@@ -92,22 +93,7 @@ export class SupabaseDatabase implements IDatabase {
     parent: string,
     children: string
   ): Promise<Game> {
-    // First check if the game exists and is not already claimed
-    const { data: existingGame, error: fetchError } = await supabase
-      .from('games')
-      .select('*')
-      .eq('id', gameId)
-      .single();
-
-    if (fetchError) {
-      throw new Error(`Game not found: ${fetchError.message}`);
-    }
-
-    if (existingGame.volunteer_parent || existingGame.volunteer_children) {
-      throw new Error('Game already claimed');
-    }
-
-    // Update the game with volunteer information
+    // Atomic claim: only update if volunteer_parent is null (game not claimed)
     const { data, error } = await supabase
       .from('games')
       .update({
@@ -115,10 +101,15 @@ export class SupabaseDatabase implements IDatabase {
         volunteer_children: children,
       })
       .eq('id', gameId)
+      .is('volunteer_parent', null) // Atomic condition: only claim if not already claimed
       .select()
       .single();
 
     if (error) {
+      // Handle the specific case where the game was already claimed
+      if (error.code === 'PGRST116') {
+        throw new Error('Game already claimed');
+      }
       throw new Error(`Failed to claim game: ${error.message}`);
     }
 

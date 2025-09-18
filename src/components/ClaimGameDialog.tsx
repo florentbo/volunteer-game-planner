@@ -9,6 +9,7 @@ import {
   Box,
   Alert,
 } from '@mui/material';
+import { logger } from '../lib/logger';
 
 type ClaimGameDialogProps = {
   open: boolean;
@@ -26,7 +27,7 @@ const ClaimGameDialog = ({
   const [parentName, setParentName] = useState('');
   const [childrenNames, setChildrenNames] = useState('');
 
-  console.log('🔍 ClaimGameDialog state:', {
+  logger.log('🔍 ClaimGameDialog state:', {
     parentName,
     childrenNames,
     disabled: !parentName.trim() || !childrenNames.trim(),
@@ -35,28 +36,26 @@ const ClaimGameDialog = ({
   // Reset form when dialog opens
   useEffect(() => {
     if (open) {
-      console.log('🔄 Dialog opened - resetting form state');
+      logger.log('🔄 Dialog opened - resetting form state');
       setParentName('');
       setChildrenNames('');
     }
   }, [open]);
 
   const handleConfirm = () => {
-    console.log('🚀 ClaimGameDialog handleConfirm called with:', {
+    logger.log('🚀 ClaimGameDialog handleConfirm called with:', {
       parentName,
       childrenNames,
     });
     if (parentName.trim() && childrenNames.trim()) {
-      console.log('📞 Calling onConfirm with:', {
+      logger.log('📞 Calling onConfirm with:', {
         parent: parentName.trim(),
         children: childrenNames.trim(),
       });
       onConfirm(parentName.trim(), childrenNames.trim());
       // Don't automatically close - let App.tsx handle closing on success
     } else {
-      console.log(
-        '⚠️ Form validation failed - missing parent or children name'
-      );
+      logger.log('⚠️ Form validation failed - missing parent or children name');
     }
   };
 
