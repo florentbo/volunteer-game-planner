@@ -14,7 +14,7 @@ import { logger } from '../lib/logger';
 type ClaimGameDialogProps = {
   open: boolean;
   onClose: () => void;
-  onConfirm: (parent: string, children: string) => void;
+  onConfirm: (parent: string, children: string) => Promise<void>;
   errorMessage?: string;
 };
 
@@ -26,6 +26,7 @@ const ClaimGameDialog = ({
 }: ClaimGameDialogProps) => {
   const [parentName, setParentName] = useState('');
   const [childrenNames, setChildrenNames] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   logger.log('🔍 ClaimGameDialog state:', {
     parentName,
@@ -42,18 +43,26 @@ const ClaimGameDialog = ({
     }
   }, [open]);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     logger.log('🚀 ClaimGameDialog handleConfirm called with:', {
       parentName,
       childrenNames,
     });
     if (parentName.trim() && childrenNames.trim()) {
-      logger.log('📞 Calling onConfirm with:', {
-        parent: parentName.trim(),
-        children: childrenNames.trim(),
-      });
-      onConfirm(parentName.trim(), childrenNames.trim());
-      // Don't automatically close - let App.tsx handle closing on success
+      setIsLoading(true);
+      try {
+        logger.log('📞 Calling onConfirm with:', {
+          parent: parentName.trim(),
+          children: childrenNames.trim(),
+        });
+        await onConfirm(parentName.trim(), childrenNames.trim());
+        // Success - dialog will be closed by parent component
+      } catch (error) {
+        // Error handling is done by parent component via errorMessage prop
+        logger.error('❌ Claim failed:', error);
+      } finally {
+        setIsLoading(false);
+      }
     } else {
       logger.log('⚠️ Form validation failed - missing parent or children name');
     }
@@ -82,6 +91,7 @@ const ClaimGameDialog = ({
             variant="outlined"
             value={parentName}
             onChange={(e) => setParentName(e.target.value)}
+            disabled={isLoading}
           />
           <TextField
             label="Nom de l'enfant"
@@ -89,6 +99,7 @@ const ClaimGameDialog = ({
             variant="outlined"
             value={childrenNames}
             onChange={(e) => setChildrenNames(e.target.value)}
+            disabled={isLoading}
           />
         </Box>
       </DialogContent>
@@ -97,9 +108,9 @@ const ClaimGameDialog = ({
         <Button
           onClick={handleConfirm}
           variant="contained"
-          disabled={!parentName.trim() || !childrenNames.trim()}
+          disabled={!parentName.trim() || !childrenNames.trim() || isLoading}
         >
-          Confirmer
+          {isLoading ? 'En cours...' : 'Confirmer'}
         </Button>
       </DialogActions>
     </Dialog>
