@@ -25,7 +25,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 const theme = createTheme();
 
-const MANAGER_PIN = '1234';
+const MANAGER_PIN = import.meta.env.VITE_MANAGER_PIN || '1234';
 
 type AppProps = {
   db: IDatabase;
@@ -52,36 +52,20 @@ function App({ db }: AppProps) {
   };
 
   const handleClaimConfirm = async (parent: string, children: string) => {
-    console.log('🎯 handleClaimConfirm called with:', {
-      parent,
-      children,
-      selectedGameId,
-    });
     if (!selectedGameId) {
-      console.log('❌ No selectedGameId, returning early');
       return;
     }
 
     try {
       setErrorMessage(''); // Clear any previous errors
-      console.log('🔄 Calling db.claimGame...');
-      const result = await db.claimGame(selectedGameId, parent, children);
-      console.log('✅ db.claimGame success:', result);
+      await db.claimGame(selectedGameId, parent, children);
       // Immediately refresh the games list for instant UI update
-      console.log('🔄 Refreshing games list for immediate UI update...');
       const updatedGames = await db.getGames();
       setGames(updatedGames);
-      console.log('✅ Games list refreshed immediately');
       // On success, close dialog and reset state
-      console.log('🚪 Closing dialog and resetting state...');
       setClaimDialogOpen(false);
       setSelectedGameId('');
-      console.log('🔄 Dialog state updated:', {
-        claimDialogOpen: false,
-        selectedGameId: '',
-      });
     } catch (error) {
-      console.log('❌ db.claimGame error:', error);
       // Show user-friendly error message
       const message =
         error instanceof Error ? error.message : 'Une erreur est survenue';
