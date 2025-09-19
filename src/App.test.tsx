@@ -1,22 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import {
-  act,
-  screen,
-  cleanup,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { act, screen, cleanup, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import CssBaseline from '@mui/material/CssBaseline';
-import { render } from '@testing-library/react';
 import App from './App';
 import { MockDatabase } from './database/MockDatabase';
 import type { Game } from './types/Game';
 
 vi.mock('./database/MockDatabase');
-
-vi.mock('@mui/icons-material/Settings', () => ({
-  default: () => <div>Settings</div>,
-}));
 
 describe('App', () => {
   let db: MockDatabase;
@@ -66,22 +55,13 @@ describe('App', () => {
     vi.restoreAllMocks();
   });
 
-  const renderWithTheme = (component: React.ReactElement) => {
-    return render(
-      <>
-        <CssBaseline />
-        {component}
-      </>
-    );
-  };
-
   it('shows games list', async () => {
-    renderWithTheme(<App db={db} />);
+    render(<App db={db} />);
     expect(await screen.findByText(/Test Team/)).toBeInTheDocument();
   });
 
   it('can claim a game through dialog', async () => {
-    renderWithTheme(<App db={db} />);
+    render(<App db={db} />);
 
     // Get all claim buttons and click the first one
     const claimButtons = await screen.findAllByRole('button', {
@@ -121,7 +101,7 @@ describe('App', () => {
   });
 
   it('displays claimed game with parent and children info', async () => {
-    renderWithTheme(<App db={db} />);
+    render(<App db={db} />);
 
     // Should display the volunteer info in French
     expect(
@@ -156,15 +136,6 @@ describe('App Manager Mode', () => {
     vi.restoreAllMocks();
   });
 
-  const renderWithTheme = (component: React.ReactElement) => {
-    return render(
-      <>
-        <CssBaseline />
-        {component}
-      </>
-    );
-  };
-
   const openPinDialog = async () => {
     await act(async () => {
       await userEvent.click(
@@ -182,18 +153,17 @@ describe('App Manager Mode', () => {
     await act(async () => {
       await userEvent.click(screen.getByRole('button', { name: /Login/i }));
     });
-    // Wait for the dialog to completely disappear
-    await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
+    // Dialog closes immediately on correct PIN, no need to wait for removal
   };
 
   it('PIN entry shows manager view', async () => {
-    renderWithTheme(<App db={db} />);
+    render(<App db={db} />);
     await loginAsManager();
     expect(await screen.findByText(/add a new game/i)).toBeInTheDocument();
   });
 
   it('wrong PIN does not allow access', async () => {
-    renderWithTheme(<App db={db} />);
+    render(<App db={db} />);
     await openPinDialog();
 
     await act(async () => {
@@ -208,7 +178,7 @@ describe('App Manager Mode', () => {
   });
 
   it('manager can add games', async () => {
-    renderWithTheme(<App db={db} />);
+    render(<App db={db} />);
     await loginAsManager();
 
     await act(async () => {
@@ -233,15 +203,6 @@ describe('App Real-time Updates', () => {
     vi.restoreAllMocks();
   });
 
-  const renderWithTheme = (component: React.ReactElement) => {
-    return render(
-      <>
-        <CssBaseline />
-        {component}
-      </>
-    );
-  };
-
   it('subscribe updates game list', async () => {
     const db = new MockDatabase();
     let callback: (games: Game[]) => void = () => {};
@@ -251,7 +212,7 @@ describe('App Real-time Updates', () => {
     });
     vi.spyOn(db, 'getGames').mockResolvedValue([]);
 
-    renderWithTheme(<App db={db} />);
+    render(<App db={db} />);
     expect(await screen.findByText(/no games/i)).toBeInTheDocument();
 
     await act(async () => {

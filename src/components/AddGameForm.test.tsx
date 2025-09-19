@@ -1,25 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
-import { screen, act } from '@testing-library/react';
+import { screen, act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { render } from '@testing-library/react';
 import AddGameForm from './AddGameForm';
-
-const theme = createTheme();
-
-const renderWithTheme = (component: React.ReactElement) => {
-  return render(
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {component}
-    </ThemeProvider>
-  );
-};
 
 describe('AddGameForm', () => {
   it('renders form fields', () => {
-    renderWithTheme(<AddGameForm onAdd={() => {}} />);
+    render(<AddGameForm onAdd={() => {}} />);
     expect(screen.getByLabelText(/opponent/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/home/i)).toBeInTheDocument();
@@ -30,7 +16,7 @@ describe('AddGameForm', () => {
 
   it('validates required fields', async () => {
     const onAdd = vi.fn();
-    renderWithTheme(<AddGameForm onAdd={onAdd} />);
+    render(<AddGameForm onAdd={onAdd} />);
 
     await act(async () => {
       await userEvent.click(screen.getByRole('button', { name: /add game/i }));
@@ -57,7 +43,7 @@ describe('AddGameForm', () => {
 
   it('calls onAdd with game data', async () => {
     const onAdd = vi.fn();
-    renderWithTheme(<AddGameForm onAdd={onAdd} />);
+    render(<AddGameForm onAdd={onAdd} />);
 
     await act(async () => {
       await userEvent.type(screen.getByLabelText(/opponent/i), 'New Team');

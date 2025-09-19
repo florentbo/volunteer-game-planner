@@ -1,16 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { screen, act } from '@testing-library/react';
+import { screen, act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { render } from '@testing-library/react';
 import GameCard from './GameCard';
 import type { Game } from '../types/Game';
-
-const theme = createTheme();
-
-const renderWithTheme = (component: React.ReactElement) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
-};
 
 const mockGame: Game = {
   id: '1',
@@ -22,14 +14,14 @@ const mockGame: Game = {
 
 describe('GameCard', () => {
   it('renders game date and opponent', () => {
-    renderWithTheme(<GameCard game={mockGame} onClaim={() => {}} />);
+    render(<GameCard game={mockGame} onClaim={() => {}} />);
     expect(screen.getByText('vs Team Opponent')).toBeInTheDocument();
     expect(screen.getByText(/Sun, Oct 26/)).toBeInTheDocument();
     expect(screen.getByText(/11:00 AM/)).toBeInTheDocument();
   });
 
   it('shows claim button when unclaimed', () => {
-    renderWithTheme(<GameCard game={mockGame} onClaim={() => {}} />);
+    render(<GameCard game={mockGame} onClaim={() => {}} />);
     expect(
       screen.getByRole('button', { name: /je m'en occupe/i })
     ).toBeInTheDocument();
@@ -37,7 +29,7 @@ describe('GameCard', () => {
 
   it('calls onClaim when claim button is clicked', async () => {
     const onClaim = vi.fn();
-    renderWithTheme(<GameCard game={mockGame} onClaim={onClaim} />);
+    render(<GameCard game={mockGame} onClaim={onClaim} />);
 
     await act(async () => {
       await userEvent.click(
@@ -53,7 +45,7 @@ describe('GameCard', () => {
       ...mockGame,
       volunteer: { parent: 'Test Parent', children: 'Test Children' },
     };
-    renderWithTheme(<GameCard game={claimedGame} onClaim={() => {}} />);
+    render(<GameCard game={claimedGame} onClaim={() => {}} />);
     expect(
       screen.getByText(/Parent: Test Parent \| Enfants: Test Children/)
     ).toBeInTheDocument();
@@ -64,7 +56,7 @@ describe('GameCard', () => {
       ...mockGame,
       volunteer: { parent: 'Test Parent', children: 'Test Children' },
     };
-    renderWithTheme(<GameCard game={claimedGame} onClaim={() => {}} />);
+    render(<GameCard game={claimedGame} onClaim={() => {}} />);
     expect(
       screen.queryByRole('button', { name: /je m'en occupe/i })
     ).not.toBeInTheDocument();

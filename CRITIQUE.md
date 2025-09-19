@@ -81,12 +81,14 @@ Alright, you asked for mean, here's everything wrong with your app:
 Since you asked for what I'd do differently, here's my complete redesign plan to fix this mess:
 
 ## Phase 1: Critical Security Fixes
+
 1. **Remove hardcoded PIN** - Implement proper authentication with Supabase Auth
 2. **Add .gitignore entries** for all script files with credentials
 3. **Environment variable validation** - Check all required vars on startup
 4. **Remove ALL console.logs** - Use proper logging library with environment-based levels
 
 ## Phase 2: Core Functionality Fixes
+
 1. **Add release/unclaim feature** - Let parents change their mind
 2. **Add confirmation dialogs** - Prevent accidental claims
 3. **Add loading states** - Spinners, skeletons, proper UX
@@ -94,6 +96,7 @@ Since you asked for what I'd do differently, here's my complete redesign plan to
 5. **Fix the duplicate data fetching** - Trust the real-time subscription
 
 ## Phase 3: UX/UI Improvements
+
 1. **Proper responsive design** - Mobile-first approach
 2. **Add game history view** - Track who brought fruits when
 3. **Consistent language** - All French or all English
@@ -101,12 +104,14 @@ Since you asked for what I'd do differently, here's my complete redesign plan to
 5. **Better date/time formatting** - Use French locale
 
 ## Phase 4: Performance & Architecture
+
 1. **Code splitting** - Lazy load the dialogs and forms
 2. **Add pagination** - Virtual scrolling for large lists
 3. **Optimize bundle size** - Tree shaking, minimize dependencies
 4. **Remove over-engineering** - Simplify the database abstraction
 
 ## Phase 5: DevOps & Quality
+
 1. **Set up GitHub Actions CI/CD** - Automated testing and deployment
 2. **Add proper testing** - Real tests with coverage targets
 3. **Add monitoring** - Sentry for errors, analytics for usage
@@ -114,6 +119,7 @@ Since you asked for what I'd do differently, here's my complete redesign plan to
 5. **Add JSDoc documentation** - Document all interfaces and complex functions
 
 ## Phase 6: New Features
+
 1. **Parent accounts** - Proper user system with login
 2. **Admin dashboard** - Statistics on who participates
 3. **Automated reminders** - Email/SMS before games
@@ -131,12 +137,14 @@ Okay, I had to roast you as requested, but let me be honest for a second...
 Despite all my harsh criticism, your app actually **solves a real problem** and **works in production**. That's honestly more than a lot of "perfect" over-engineered apps can claim!
 
 Think about it:
+
 - Your app is **live and functional** at https://boys-fruits.netlify.app
 - Parents are **actually using it** (I saw Delphine and Béa already claimed games!)
 - It **prevents the real pain point** of forgetting fruit duties
 - You built something **simple that works** instead of getting lost in analysis paralysis
 
 Meanwhile, I've seen developers spend months building "perfect" architectures with:
+
 - Complex microservices for simple CRUD
 - Over-abstracted layers that nobody understands
 - Beautiful test suites for apps that never ship
@@ -145,6 +153,7 @@ Meanwhile, I've seen developers spend months building "perfect" architectures wi
 Your app has ugly console.logs and a "1234" PIN, but guess what? **It's shipping value to real users RIGHT NOW**!
 
 That's the classic engineer trade-off:
+
 - **Perfect code that never ships** = 0 value
 - **Imperfect code that solves real problems** = ∞ value
 

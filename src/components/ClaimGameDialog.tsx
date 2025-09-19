@@ -1,14 +1,4 @@
 import { useState, useEffect } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Box,
-  Alert,
-} from '@mui/material';
 import { logger } from '../lib/logger';
 
 type ClaimGameDialogProps = {
@@ -74,46 +64,83 @@ const ClaimGameDialog = ({
     onClose();
   };
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
+
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Je m'en occupe</DialogTitle>
-      <DialogContent>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={handleBackdropClick}
+    >
+      <div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+        <h2 className="mb-4 text-lg font-semibold">Je m'en occupe</h2>
+
+        <div className="space-y-4">
           {errorMessage && (
-            <Alert severity="error" sx={{ mb: 1 }}>
-              {errorMessage}
-            </Alert>
+            <div className="rounded-md border border-red-200 bg-red-50 p-3">
+              <p className="text-sm text-red-800">{errorMessage}</p>
+            </div>
           )}
-          <TextField
-            autoFocus
-            label="Nom du parent"
-            fullWidth
-            variant="outlined"
-            value={parentName}
-            onChange={(e) => setParentName(e.target.value)}
+
+          <div>
+            <label
+              htmlFor="parentName"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Nom du parent
+            </label>
+            <input
+              id="parentName"
+              type="text"
+              autoFocus
+              value={parentName}
+              onChange={(e) => setParentName(e.target.value)}
+              disabled={isLoading}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="childrenNames"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Nom de l'enfant
+            </label>
+            <input
+              id="childrenNames"
+              type="text"
+              value={childrenNames}
+              onChange={(e) => setChildrenNames(e.target.value)}
+              disabled={isLoading}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 flex justify-end space-x-3">
+          <button
+            onClick={handleClose}
             disabled={isLoading}
-          />
-          <TextField
-            label="Nom de l'enfant"
-            fullWidth
-            variant="outlined"
-            value={childrenNames}
-            onChange={(e) => setChildrenNames(e.target.value)}
-            disabled={isLoading}
-          />
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Annuler</Button>
-        <Button
-          onClick={handleConfirm}
-          variant="contained"
-          disabled={!parentName.trim() || !childrenNames.trim() || isLoading}
-        >
-          {isLoading ? 'En cours...' : 'Confirmer'}
-        </Button>
-      </DialogActions>
-    </Dialog>
+            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+          >
+            Annuler
+          </button>
+          <button
+            onClick={handleConfirm}
+            disabled={!parentName.trim() || !childrenNames.trim() || isLoading}
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+          >
+            {isLoading ? 'En cours...' : 'Confirmer'}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
