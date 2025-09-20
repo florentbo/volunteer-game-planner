@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AI CLI Reference Hub
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides general guidance for various AI CLI tools when working with this repository.
 
 ## Project Overview
 
@@ -42,14 +42,32 @@ src/
 ├── components/          # React components
 │   ├── GameList.tsx    # Container for game cards
 │   ├── GameCard.tsx    # Individual game display/interaction
-│   └── AddGameForm.tsx # Manager-only game creation form
+│   ├── AddGameForm.tsx # Manager-only game creation form
+│   └── ClaimGameDialog.tsx # Dialog for claiming games
 ├── database/           # Data layer abstraction
 │   ├── IDatabase.ts    # Database interface contract
-│   └── MockDatabase.ts # In-memory implementation
+│   ├── MockDatabase.ts # In-memory implementation
+│   └── SupabaseDatabase.ts # Supabase implementation
+├── lib/                # Utility libraries
+│   ├── logger.ts       # Logging utilities
+│   └── supabase.ts     # Supabase client setup
 ├── types/              # TypeScript type definitions
 │   └── Game.ts         # Core Game type
-└── test/               # Test utilities and setup
-    └── setup.tsx       # Test configuration with MUI theme
+├── test/               # Test utilities and setup
+│   └── setup.tsx       # Test configuration with MUI theme
+└── assets/             # Static assets
+    └── react.svg       # React logo
+
+doc/                    # Documentation files
+├── ARCHITECTURE_REVIEW.md
+├── CRITIQUE.md
+├── DEPLOYMENT.md
+├── PLAN.md
+├── PROJECT_ANALYSIS.md
+├── REFACTOR_PLAN.md
+├── SUPABASE_SETUP.md
+├── claude-plan.md
+└── gpt5_plan.md
 ```
 
 ## Core Types
@@ -71,3 +89,7 @@ src/
 - Database operations are Promise-based for future async implementation
 - Manager functionality requires PIN authentication (currently hardcoded as '1234')
 - Sample data is populated on app initialization with mock games
+
+## Tool-Specific Guidance
+
+For Claude Code specific guidance, see [CLAUDE.md](./CLAUDE.md)

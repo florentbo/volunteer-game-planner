@@ -1,13 +1,22 @@
 # Game Schedule Management App
 
-This is a **Game Schedule Management App** built with React, TypeScript, and Vite. The app allows volunteers to claim and release games, with manager functionality behind a PIN-protected interface.
+This is a **Game Schedule Management App** built with React, TypeScript, and Vite. It helps manage volunteer tasks for a kids' team, allowing parents to sign up for games.
 
-## Key Architecture Concepts
+## What It Does
 
-- **Database Abstraction**: Uses an `IDatabase` interface pattern for data access, implemented with `SupabaseDatabase` for PostgreSQL storage with real-time capabilities.
-- **Component-based Structure**: React components organized by responsibility (GameList, GameCard, AddGameForm).
-- **Material-UI Integration**: Uses MUI components with a consistent theme throughout the app.
-- **Dependency Injection**: The database instance is injected into the App component via props for testability.
+This application helps manage volunteer tasks for a kids' team. Parents can view a schedule of games and sign up ("claim a task") for specific games they can help with. A manager can add new games to the schedule through a PIN-protected interface.
+
+## How It Works: Claiming a Task
+
+The core functionality allows a parent to volunteer for a game:
+
+1.  **Trigger**: A parent clicks the "Je m'en occupe" ("I'll take care of it") button on an available game.
+2.  **Dialog**: A form appears, asking for the parent's name and the child's/children's names.
+3.  **Confirm**: After filling the form, the parent confirms.
+4.  **Database Update**: The system calls `claimGame()` to assign the volunteer to the game.
+5.  **UI Update**: The game card updates to show the volunteer's information.
+
+This ensures every game task is clearly assigned.
 
 ## Getting Started
 
@@ -31,19 +40,22 @@ This is a **Game Schedule Management App** built with React, TypeScript, and Vit
     npm install
     ```
 
-### Environment Variables
+### Environment Setup
 
-Create a `.env` file in the root of the project. You can copy the example file:
+Instead of a `.env` file, this project uses a shell script to configure environment variables for development.
 
-```bash
-cp .env.example .env
-```
+1.  Copy the template script:
+    ```bash
+    cp scripts/set-dev-env.sh.template scripts/set-dev-env.sh
+    ```
+2.  **Edit `scripts/set-dev-env.sh`** and fill in your Supabase project URL and anonymous key.
 
-Then, fill in the required values:
+3.  Load the environment variables into your shell session before running the app:
+    ```bash
+    source scripts/set-dev-env.sh
+    ```
 
-- `VITE_SUPABASE_URL`: Your Supabase project URL.
-- `VITE_SUPABASE_ANON_KEY`: Your Supabase project anonymous key.
-- `VITE_MANAGER_PIN`: The PIN for the manager interface (defaults to `1234` if not set).
+Now you can start the development server with `npm run dev:env`.
 
 ## Development Commands
 
@@ -71,43 +83,23 @@ npm run format:check     # Check if code is properly formatted
 
 ```
 src/
-├── components/          # React components
-│   ├── GameList.tsx    # Container for game cards
-│   ├── GameCard.tsx    # Individual game display/interaction
-│   └── AddGameForm.tsx # Manager-only game creation form
+├── assets/             # Static assets
+├── components/         # React components
+│   ├── AddGameForm.tsx
+│   ├── ClaimGameDialog.tsx
+│   ├── GameCard.tsx
+│   └── GameList.tsx
 ├── database/           # Data layer abstraction
-│   ├── IDatabase.ts    # Database interface contract
-│   └── MockDatabase.ts # In-memory implementation
-│   └── SupabaseDatabase.ts # Supabase implementation
+│   ├── IDatabase.ts
+│   ├── MockDatabase.ts
+│   └── SupabaseDatabase.ts
+├── lib/                # Utility libraries
+│   ├── logger.ts
+│   └── supabase.ts
 ├── types/              # TypeScript type definitions
-│   └── Game.ts         # Core Game type
+│   └── Game.ts
 └── test/               # Test utilities and setup
-    └── setup.tsx       # Test configuration with MUI theme
-```
+    └── setup.tsx
 
-## Core Types
-
-- **Game**: `{ id: string, date: Date, opponent: string, isHome: boolean, volunteer: string | null }`
-- **IDatabase**: Interface defining all data operations (getGames, addGame, claimGame, releaseGame, subscribe)
-
-## Testing
-
-- Uses **Vitest** with **jsdom** environment.
-- **React Testing Library** for component testing.
-- A custom render function in `src/test/setup.tsx` wraps components with an MUI ThemeProvider.
-- Most components have corresponding `.test.tsx` files.
-
-## Data Management
-
-### Seeding
-
-The application uses a mock database (`MockDatabase.ts`) by default in the standard `dev` environment, which is populated with sample data on initialization. When using the `dev:env` command with Supabase, the database should be seeded manually or via Supabase Studio's SQL editor.
-
-### Clearing Volunteer Data
-
-To clear all volunteer claims from the database, you can run the SQL script `clear-volunteer-data.sql` in your Supabase SQL editor. This is useful for testing or resetting the schedule's state.
-
-```sql
--- clear-volunteer-data.sql
-UPDATE games SET volunteer = NULL;
+doc/                    # Documentation files
 ```

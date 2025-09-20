@@ -42,14 +42,32 @@ src/
 ├── components/          # React components
 │   ├── GameList.tsx    # Container for game cards
 │   ├── GameCard.tsx    # Individual game display/interaction
-│   └── AddGameForm.tsx # Manager-only game creation form
+│   ├── AddGameForm.tsx # Manager-only game creation form
+│   └── ClaimGameDialog.tsx # Dialog for claiming games
 ├── database/           # Data layer abstraction
 │   ├── IDatabase.ts    # Database interface contract
-│   └── MockDatabase.ts # In-memory implementation
+│   ├── MockDatabase.ts # In-memory implementation
+│   └── SupabaseDatabase.ts # Supabase implementation
+├── lib/                # Utility libraries
+│   ├── logger.ts       # Logging utilities
+│   └── supabase.ts     # Supabase client setup
 ├── types/              # TypeScript type definitions
 │   └── Game.ts         # Core Game type
-└── test/               # Test utilities and setup
-    └── setup.tsx       # Test configuration with MUI theme
+├── test/               # Test utilities and setup
+│   └── setup.tsx       # Test configuration with MUI theme
+└── assets/             # Static assets
+    └── react.svg       # React logo
+
+doc/                    # Documentation files
+├── ARCHITECTURE_REVIEW.md
+├── CRITIQUE.md
+├── DEPLOYMENT.md
+├── PLAN.md
+├── PROJECT_ANALYSIS.md
+├── REFACTOR_PLAN.md
+├── SUPABASE_SETUP.md
+├── claude-plan.md
+└── gpt5_plan.md
 ```
 
 ## Core Types
@@ -71,3 +89,8 @@ src/
 - Database operations are Promise-based for future async implementation
 - Manager functionality requires PIN authentication (currently hardcoded as '1234')
 - Sample data is populated on app initialization with mock games
+
+## Claude Code Specific Notes
+
+- Use the `@` symbol to reference files (e.g., `@CLAUDE.md`, `@README.md`)
+- For general AI CLI guidance, see [AGENTS.md](./AGENTS.md)
