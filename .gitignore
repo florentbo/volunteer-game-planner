@@ -26,3 +26,6 @@ scripts/set-netlify-env.sh
 *.njsproj
 *.sln
 *.sw?
+
+# Netlify
+.netlify
