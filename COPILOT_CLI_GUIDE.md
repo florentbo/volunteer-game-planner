@@ -141,6 +141,7 @@ gh copilot config
 ```
 
 Current configuration options:
+
 - **Usage Analytics**: Allow GitHub to collect optional usage data
 - **Command Execution**: Default confirmation behavior for command execution
 - **No Model Selection**: Cannot choose different AI models
@@ -176,14 +177,14 @@ gh copilot suggest "deploy to Netlify from CLI"
 
 ## Comparison with Other AI CLI Tools
 
-| Feature | GitHub Copilot CLI | Other Tools (aider, cursor) |
-|---------|-------------------|------------------------------|
-| **Model Choice** | Fixed (GPT-4 family) | Multiple models available |
-| **Local Models** | No support | Some tools support local models |
-| **Configuration** | Minimal options | Extensive model configuration |
-| **Integration** | Deep GitHub integration | General purpose |
-| **Context** | Git repo aware | Varies by tool |
-| **Cost** | Included with Copilot subscription | Varies (some free, some paid) |
+| Feature           | GitHub Copilot CLI                 | Other Tools (aider, cursor)     |
+| ----------------- | ---------------------------------- | ------------------------------- |
+| **Model Choice**  | Fixed (GPT-4 family)               | Multiple models available       |
+| **Local Models**  | No support                         | Some tools support local models |
+| **Configuration** | Minimal options                    | Extensive model configuration   |
+| **Integration**   | Deep GitHub integration            | General purpose                 |
+| **Context**       | Git repo aware                     | Varies by tool                  |
+| **Cost**          | Included with Copilot subscription | Varies (some free, some paid)   |
 
 ## Advanced Usage Tips
 
@@ -232,6 +233,7 @@ gh copilot suggest "debug React component rendering issues"
 ## Future Developments
 
 GitHub is likely to add:
+
 - Model selection options
 - Improved context understanding
 - Better integration with GitHub features
@@ -239,5 +241,5 @@ GitHub is likely to add:
 
 ---
 
-*Last updated: $(date)*
-*GitHub Copilot CLI Version: Latest available*
+_Last updated: $(date)_
+_GitHub Copilot CLI Version: Latest available_
