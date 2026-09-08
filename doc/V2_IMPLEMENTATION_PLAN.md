@@ -8,11 +8,113 @@ Use one persistent Codex goal for the project and record milestone progress in t
 
 This document is the agreed plan; implementation has not started.
 
+## Product delivery loop
+
+Use the project-local `product-owner` and `functional-analysis` skills together
+with the global `ai-tdd` skill. Work one useful outcome at a time:
+
+1. `product-owner` recommends the next smallest useful outcome and records the
+   approved scope, non-goals, and success evidence in a Product Brief.
+2. `functional-analysis` resolves the business rules and produces traceable
+   `BR-*` rules and concrete `SC-*` acceptance scenarios.
+3. `ai-tdd` implements one accepted `SC-*` scenario at a time through Red,
+   Super Green, and Refining Refactor.
+4. An independent TypeScript review checks the accepted brief, scenarios,
+   implementation diff, runtime boundaries, security, and tests. The reviewer
+   reports findings and does not modify the code it reviews.
+5. The implementer addresses valid findings, runs the milestone validation, and
+   demonstrates the outcome. `product-owner` records acceptance and recommends
+   the next outcome.
+
+Material product scope and priority decisions remain with the product authority.
+Open low-risk questions may be retained with an owner; blocking questions must
+be settled before implementation.
+
+The TypeScript review skill is deliberately deferred. Define it after the FA and
+PO skills have been exercised on milestone 1 analysis and before milestone 1 is
+accepted. Its project-local name will be `typescript-review`. Reuse the generic
+reviewer's independence, fixed-diff scope, severity vocabulary, security, and
+testability principles, but do not inherit blanket class-oriented Clean Code
+rules or Angular-specific conventions.
+
+### Deferred TypeScript review contract
+
+The reviewer accepts a fixed Git comparison point, the approved Product Brief,
+the applicable `BR-*` rules and `SC-*` scenarios, repository instructions, and
+the available validation evidence. If the comparison point is absent or does
+not resolve, stop and ask for it. Review the complete changed files when diff
+context alone is insufficient.
+
+Report findings under two independent axes so correct-looking code cannot hide
+the wrong product behavior, and correct product behavior cannot hide unsafe
+code:
+
+- **Spec:** missing or partial scenarios, incorrect behavior, and unapproved
+  scope.
+- **Engineering:** TypeScript correctness, runtime boundaries, React and state
+  behavior, security, tests, and maintainability relevant to the change.
+
+Do not merge the two axes into one score. Every finding states severity, exact
+location, violated scenario or engineering rule, user or operational impact,
+and a correction direction. The reviewer reports only evidence-backed findings,
+does not manufacture comments to fill categories, and never edits reviewed
+code.
+
+Keep `SKILL.md` as a concise review-and-routing workflow. Put substantial rules
+in references that are loaded only when the diff needs them:
+
+- TypeScript correctness, narrowing, unsafe assertions, async behavior, error
+  handling, and validation where untrusted data enters the application.
+- React 19 and Vite behavior, using only applicable client-side performance and
+  composition guidance rather than Next.js or React Server Component rules.
+- TanStack Query keys, invalidation, dependent queries, optimistic rollback,
+  cache state, and mutation concurrency.
+- Supabase authentication and RLS, browser/server credential boundaries,
+  Sportlink payloads, Europe/Brussels dates, and claim concurrency.
+
+Source non-obvious guidance from current official documentation, library source,
+and demonstrated failure modes. Record the inspected source version or date so
+stale framework guidance can be identified later. Do not duplicate rules that
+TypeScript, ESLint, or another configured tool enforces reliably.
+
+Research inputs for the first version are Matt Pocock's separate
+[Spec and Standards review axes](https://github.com/mattpocock/skills/blob/main/docs/engineering/code-review.md),
+TanStack Intent's [source-grounded skill generation](https://github.com/TanStack/intent),
+Vercel's conditional [React performance guidance](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices),
+and the official [TanStack Query ESLint rules](https://tanstack.com/query/latest/docs/eslint/eslint-plugin-query).
+Treat these as inputs rather than installing their complete skill collections
+or making their conventions project authority.
+
+## Behavior-first TDD strategy
+
+Use a Testing Trophy: static analysis forms the base, integration tests carry
+most behavioral confidence, focused unit tests cover isolated logic, and a few
+browser tests protect critical journeys. Organize tests by capability and
+accepted scenario, never by a rule that every class, component, interface, or
+source file needs a matching test file.
+
+Choose the cheapest stable boundary that can expose the real failure:
+
+| Behavior | Primary test boundary |
+|---|---|
+| Pure parsing, date calculation, transformation, or domain invariant | Focused Vitest test |
+| React behavior spanning components and state | React Testing Library integration test |
+| Supabase schema, constraints, RLS, and database functions | pgTAP through `supabase test db` |
+| Authenticated application behavior against Supabase | `supabase-js` integration test against the local stack |
+| Sportlink request and response compatibility | Adapter contract test with sanitized real-shaped fixtures |
+| Critical parent journey through the browser | Playwright end-to-end test |
+| Production provider configuration and real SMS | Deployment smoke test |
+
+Mock only unavailable external boundaries. Use the real local Supabase stack for
+database, authentication, authorization, and concurrency behavior. Assert on
+state and user-visible outcomes instead of internal calls. Do not repeat the same
+claim at every layer unless each test detects a distinct failure mode.
+
 ## Milestones and deliverables
 
 ### 0 — Technical foundation
 
-Initialize Git immediately after creating the new repository directory at `/home/florent/personal-dev/volunteer-game-planner-v2`. Set up React, Vite, TypeScript, TanStack Query, Supabase, Tailwind, tests, and build checks. Resolve current stable compatible dependencies and commit the lockfile.
+Initialize Git immediately after creating the new repository directory at `/home/florent/personal-dev/volunteer-game-planner-v2`. Copy this branch's `.agents/skills` directory into the new repository. Set up React, Vite, TypeScript, TanStack Query, Supabase, Tailwind, Vitest, React Testing Library, Playwright, Supabase database tests, and build checks. Configure the official TanStack Query ESLint plugin with the project's TypeScript and React linting; keep mechanically enforceable Query rules out of the future review skill. Resolve current stable compatible dependencies and commit the lockfile.
 
 Write the README and implementation document first, including flows, acceptance criteria, environment setup, and instructions for testing phone login without SMS.
 
@@ -83,6 +185,13 @@ References: [Supabase CLI test OTP configuration](https://supabase.com/docs/guid
 ## Acceptance and testing
 
 Each milestone ends with a short demonstration, relevant passing tests, documentation updates, and a commit.
+
+For each `SC-*` scenario, first select its primary test boundary, observe a
+meaningful failure, implement the behavior, and run the affected integration
+slice. At milestone completion, run TypeScript and lint checks, the complete
+Vitest suite, Supabase database tests, and the milestone's critical Playwright
+flows. Do not use test-layer percentages or coverage quotas as a substitute for
+confidence in the agreed behavior.
 
 - Login: approved accounts, wrong OTP, restored session, logout, and anonymous denial.
 - Schedule: real fixtures, results, timezone display, repeated imports, and upstream failures.
