@@ -1,0 +1,3 @@
+interface:
+  display_name: "TypeScript Review"
+  short_description: "Review strict React and Supabase changes before acceptance"

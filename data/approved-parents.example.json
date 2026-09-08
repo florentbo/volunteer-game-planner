@@ -1,0 +1,12 @@
+[
+  {
+    "phone": "+32470000001",
+    "parentName": "Parent Test",
+    "children": ["Enfant Test"]
+  },
+  {
+    "phone": "+32470000002",
+    "parentName": "Deuxième Parent",
+    "children": ["Deuxième Enfant"]
+  }
+]

@@ -1,0 +1,9 @@
+.logs/
+.agents/
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+supabase/.temp/
+src/lib/database.types.ts

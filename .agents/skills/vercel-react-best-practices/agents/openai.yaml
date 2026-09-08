@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vercel React Best Practices"
+  short_description: "Review React rendering and client performance"
+
